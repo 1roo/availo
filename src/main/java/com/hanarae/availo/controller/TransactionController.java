@@ -1,6 +1,8 @@
 package com.hanarae.availo.controller;
 
 import com.hanarae.availo.domain.Transaction;
+import com.hanarae.availo.dto.TransactionRequestDto;
+import com.hanarae.availo.dto.TransactionResponseDto;
 import com.hanarae.availo.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +16,9 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping
-    public Transaction save(@RequestBody Transaction transaction) {
-        return transactionService.save(transaction);
+    public TransactionResponseDto save(@RequestBody TransactionRequestDto dto) {
+        Transaction saved = transactionService.save(dto.toEntity());
+        return TransactionResponseDto.from(saved);
     }
 
     @GetMapping("/month")
