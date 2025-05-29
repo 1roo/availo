@@ -27,6 +27,15 @@ public class TransactionController {
         return TransactionResponseDto.from(saved);
     }
 
+    @PostMapping("/batch")
+    @Operation(summary = "여러 수입/지출 항목 일괄 등록")
+    public List<TransactionResponseDto> saveAll(@RequestBody List<TransactionRequestDto> dtos) {
+        return dtos.stream()
+                .map(dto -> transactionService.save(dto.toEntity()))
+                .map(TransactionResponseDto::from)
+                .toList();
+    }
+
     @Operation(summary = "월별 내역 조회", description = "지정한 연도와 월에 해당하는 모든 트랜잭션 내역을 조회")
     @GetMapping("/month")
     public List<Transaction> getByMonth(@RequestParam int year, @RequestParam int month) {
