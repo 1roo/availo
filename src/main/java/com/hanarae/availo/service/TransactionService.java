@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -31,5 +32,20 @@ public class TransactionService {
         int totalExpense = fixedExpenses.stream().mapToInt(Transaction::getAmount).sum();
 
         return totalIncome - totalExpense;
+    }
+
+    public Map<String, Integer> getForecastForNextMonth(){
+        List<Transaction> fixedIncomes = transactionRepository.findByType("fixed_income");
+        List<Transaction> fixedExpenses = transactionRepository.findByType("fixed_expense");
+
+        int income = fixedIncomes.stream().mapToInt(Transaction::getAmount).sum();
+        int expense = fixedExpenses.stream().mapToInt(Transaction::getAmount).sum();
+        int available = income - expense;
+
+        return Map.of(
+                "fixedIncome", income,
+                "fixed_expense", expense,
+                "available", available
+        );
     }
 }

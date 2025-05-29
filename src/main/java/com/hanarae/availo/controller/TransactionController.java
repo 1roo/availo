@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -29,5 +30,10 @@ public class TransactionController {
     @GetMapping("/next-month-available")
     public int getAvailableMoneyForNextMonth() {
         return transactionService.calculateAvailableAmountForNextMonth();
+    }
+
+    @GetMapping("/next-month-forecast")
+    public Map<String, Integer> getForecastForNextMonth() {
+        return transactionService.getForecastForNextMonth();
     }
 }
