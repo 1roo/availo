@@ -1,6 +1,7 @@
 package com.hanarae.availo.service;
 
 import com.hanarae.availo.domain.Transaction;
+import com.hanarae.availo.dto.ForecastResponseDto;
 import com.hanarae.availo.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,17 +25,7 @@ public class TransactionService {
         return transactionRepository.findByDateBetween(start, end);
     }
 
-    public int calculateAvailableAmountForNextMonth() {
-        List<Transaction> fixedIncomes = transactionRepository.findByType("fixed_income");
-        List<Transaction> fixedExpenses = transactionRepository.findByType("fixed_expense");
-
-        int totalIncome = fixedIncomes.stream().mapToInt(Transaction::getAmount).sum();
-        int totalExpense = fixedExpenses.stream().mapToInt(Transaction::getAmount).sum();
-
-        return totalIncome - totalExpense;
-    }
-
-    public Map<String, Integer> getForecastForNextMonth(){
+    public ForecastResponseDto getForecastForNextMonth(){
         List<Transaction> fixedIncomes = transactionRepository.findByType("fixed_income");
         List<Transaction> fixedExpenses = transactionRepository.findByType("fixed_expense");
 
@@ -42,10 +33,6 @@ public class TransactionService {
         int expense = fixedExpenses.stream().mapToInt(Transaction::getAmount).sum();
         int available = income - expense;
 
-        return Map.of(
-                "fixedIncome", income,
-                "fixed_expense", expense,
-                "available", available
-        );
+        return new ForecastResponseDto(income, expense, available);
     }
 }

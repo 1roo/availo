@@ -1,6 +1,7 @@
 package com.hanarae.availo.controller;
 
 import com.hanarae.availo.domain.Transaction;
+import com.hanarae.availo.dto.ForecastResponseDto;
 import com.hanarae.availo.dto.TransactionRequestDto;
 import com.hanarae.availo.dto.TransactionResponseDto;
 import com.hanarae.availo.service.TransactionService;
@@ -32,10 +33,9 @@ public class TransactionController {
         return transactionService.findByMonth(year, month);
     }
 
-
     @Operation(summary = "다음 달 가용 금액 예측", description = "고정 수입과 고정 지출을 기반으로 다음 달의 사용 가능 금액을 계산")
     @GetMapping("/next-month-forecast")
-    public Map<String, Integer> getForecastForNextMonth() {
+    public ForecastResponseDto getForecastForNextMonth() {
         return transactionService.getForecastForNextMonth();
     }
 }
